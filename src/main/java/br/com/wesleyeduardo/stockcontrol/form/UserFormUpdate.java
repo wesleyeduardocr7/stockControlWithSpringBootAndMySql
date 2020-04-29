@@ -18,6 +18,12 @@ public class UserFormUpdate {
     @Length(min = 5)
     private String login;
 
+
+    @NotNull
+    @NotEmpty
+    @Length(min = 5)
+    private String password;
+
     public String getName() {
         return name;
     }
@@ -34,12 +40,21 @@ public class UserFormUpdate {
         this.login = login;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public User update(Long id, UserRepository userRepository) {
 
         User user = userRepository.getOne(id);
 
         user.setName(this.name);
         user.setLogin(this.login);
+        user.setPassword(this.password);
 
         return  user;
 
