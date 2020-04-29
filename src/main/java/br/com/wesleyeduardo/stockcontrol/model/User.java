@@ -11,7 +11,6 @@ public class User implements UserDetails, GrantedAuthority {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	@Column(name = "iduser")
 	private Long id;
 
