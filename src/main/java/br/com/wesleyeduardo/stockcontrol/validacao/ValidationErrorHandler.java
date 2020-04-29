@@ -15,22 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
-public class ErroDeValidacaoHandler {
+public class ValidationErrorHandler {
 
     @Autowired
     private MessageSource messageSource;
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ErroDeFormularioDto> handle(MethodArgumentNotValidException exception) {
+    public List<FormErrorDto> handle(MethodArgumentNotValidException exception) {
 
-        List<ErroDeFormularioDto> dto = new ArrayList<>();
+        List<FormErrorDto> dto = new ArrayList<>();
 
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 
         fieldErrors.forEach(e -> {
             String mensagem = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-            ErroDeFormularioDto erro = new ErroDeFormularioDto(e.getField(), mensagem);
+            FormErrorDto erro = new FormErrorDto(e.getField(), mensagem);
             dto.add(erro);
         });
 

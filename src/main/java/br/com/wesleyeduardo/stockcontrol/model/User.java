@@ -1,10 +1,13 @@
 package br.com.wesleyeduardo.stockcontrol.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "tb_user")
-public class User{
+public class User implements UserDetails, GrantedAuthority {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,14 +15,16 @@ public class User{
 	@Column(name = "iduser")
 	private Long id;
 
+	@Column(name = "name")
 	private String name;
 
-	@Column(unique = true)
+	@Column(name = "cpf", unique = true)
 	private String cpf;
 
-	@Column(unique = true)
+	@Column(name = "login",unique = true)
 	private String login;
 
+	@Column(name = "password")
 	private String password;
 
 	public User() {}
@@ -59,11 +64,47 @@ public class User{
 		this.login = login;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.login;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	@Override
+	public String getAuthority() {
+		return login;
 	}
 }

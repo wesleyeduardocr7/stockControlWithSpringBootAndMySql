@@ -22,30 +22,26 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping
-   // @Cacheable(value = "listUsers")
-    public Page<UserDto> list(@RequestParam(required = false) String name,
-                               @PageableDefault(sort = "id", direction = Sort.Direction.DESC,
+    @Cacheable(value = "listUsers")
+    public Page<UserDto> list(@PageableDefault(sort = "id", direction = Sort.Direction.DESC,
                                  page = 0, size = 10) Pageable pagination) {
 
-        if (name == null) {
-            Page<User> users = userRepository.findAll(pagination);
-            return UserDto.converter(users);
-        } else {
-            Page<User> users = userRepository.findByName(name, pagination);
-            return UserDto.converter(users);
-        }
+        Page<User> users = userRepository.findAll(pagination);
+
+        return UserDto.converter(users);
+
     }
 
     @PostMapping
     @Transactional
-   // @CacheEvict(value = "listUsers", allEntries = true)
+    @CacheEvict(value = "listUsers", allEntries = true)
     public ResponseEntity<UserDto> create(@RequestBody @Valid UserForm userForm, UriComponentsBuilder uriBuilder){
 
        User user = userForm.toConvert();
@@ -73,7 +69,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Transactional
-   // @CacheEvict(value = "listUsers", allEntries = true)
+    @CacheEvict(value = "listUsers", allEntries = true)
     public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody @Valid UserFormUpdate userFormUpdate){
 
         Optional<User> optional = userRepository.findById(id);
@@ -89,7 +85,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Transactional
-   // @CacheEvict(value = "listUsers", allEntries = true)
+    @CacheEvict(value = "listUsers", allEntries = true)
     public  ResponseEntity delete(@PathVariable Long id){
 
         Optional<User> optional = userRepository.findById(id);

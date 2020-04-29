@@ -18,7 +18,6 @@ public class UserFormUpdate {
     @Length(min = 5)
     private String login;
 
-
     public String getName() {
         return name;
     }
